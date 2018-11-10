@@ -7,34 +7,9 @@ struct Matrix {
 	int** matrix;
 };
 
-Matrix* createMatrix(int size);
-
-void deleteMatrix(Matrix* matrix) {
-	__asm {
-
-	}
-}
-
-int get(Matrix* matrix, int i, int j) {
-	__asm {
-
-	}
-}
-
-void set(Matrix* matrix, int elem, int i, int j) {
-	__asm {
-
-	}
-}
-
-void print(Matrix* matrix) {
-	__asm {
-
-	}
-}
-
-int* rowPermutations(Matrix* matrix) {
-	__asm {
-
-	}
-}
+Matrix* createMatrix(int matrixSize);
+void deleteMatrix(Matrix* matrix);
+int get(Matrix* matrix, int i, int j);
+void set(Matrix* matrix, int elem, int i, int j);
+void print(Matrix* matrix);
+int* rowPermutations(Matrix* matrix);
