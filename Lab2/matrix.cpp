@@ -103,8 +103,8 @@ void print(Matrix* matrix) {
 		mov		edi, [esi]; size
 		dec		edi
 		
-		mov		ebx, 0; i
-		mov		ecx, 0; j
+		xor		ebx, ebx; i
+		xor		ecx, ecx; j
 
 	CYCLE:
 		mov		edx, [esi + 4 + ebx * 4]
