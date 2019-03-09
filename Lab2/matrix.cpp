@@ -163,7 +163,78 @@ int* rowPermutations(Matrix* matrix) {
 	return result;
 	*/
 	__asm {
+		mov		esi, matrix
+		mov		edi, [esi]
 
-		mov		eax, 0
+		mov		eax, edi
+		mov		ebx, 4
+		imul	ebx
+		
+		push	eax
+		call	malloc
+		add		esp, 4
+
+		mov		ecx, edi
+		dec		ecx
+
+	INIT_RESULT:
+		mov[eax + ecx * 4], 0
+		loop INIT_RESULT
+		mov[eax + ecx * 4], 0
+
+		push	eax
+
+		mov		edx, 0
+	CYCLE_I:
+		cmp		edx, edi
+		jge		END_CYCLE_I
+
+		mov		ecx, 0
+		CYCLE_J:
+			cmp		ecx, edi
+			jge		END_CYCLE_J
+			
+			cmp		edx, ecx
+			je		I_EQUALS_J
+
+			; bool flag;
+
+			mov		ebx, 0
+			CYCLE_K:
+				cmp		ebx, edi
+				jge		END_CYCLE_K
+				
+				; flag = false;
+
+				mov		eax, 0
+				CYCLE_L:
+					cmp		eax, edi
+					jge		END_CYCLE_L
+
+					; if (get(matrix, i, k) == get(matrix, j, l))
+						; flag = true
+						; break;
+
+					inc		eax
+					jmp		CYCLE_L
+				END_CYCLE_L:
+
+				; if (!flag) { break; }
+				
+				inc		ebx
+				jmp		CYCLE_K
+			END_CYCLE_K:
+
+			; if (flag) { result[i] = 1; break; }
+
+			I_EQUALS_J:
+			inc		ecx
+			jmp		CYCLE_J
+		END_CYCLE_J:
+
+		inc		edx
+		jmp		CYCLE_I
+	END_CYCLE_I:
+		pop		eax
 	}
 }
