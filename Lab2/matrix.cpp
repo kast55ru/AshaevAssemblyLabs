@@ -133,6 +133,35 @@ void print(Matrix* matrix) {
 }
 
 int* rowPermutations(Matrix* matrix) {
+	/*
+	int* result = new int[matrix->size]{};
+
+	for (int i = 0; i < matrix->size; i++) {
+		for (int j = 0; j < matrix->size; j++) {
+			if (i != j) {
+				bool flag;
+				for (int k = 0; k < matrix->size; k++) {
+					flag = false;
+					for (int l = 0; l < matrix->size; l++) {
+						if (get(matrix, i, k) == get(matrix, j, l)) {
+							flag = true;
+							break;
+						}
+					}
+					if (!flag) {
+						break;
+					}
+				}
+				if (flag) {
+					result[i] = 1;
+					break;
+				}
+			}
+		}
+	}
+	
+	return result;
+	*/
 	__asm {
 
 		mov		eax, 0

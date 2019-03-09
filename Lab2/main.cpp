@@ -10,15 +10,15 @@ int main() {
 	set(matrix, 3, 2, 0); set(matrix, 2, 2, 1); set(matrix, 1, 2, 2);
 	
 	print(matrix);
-	/*
+	
 	int* result = rowPermutations(matrix);
-	std::cout << "result = { " << std::endl;
+	std::cout << "result = { ";
 	for (int i = 0; i < size; i++) {
 		std::cout << result[i] << " ";
 	}
 	std::cout << "}" << std::endl;
 	delete[] result;
-	*/
+	
 	deleteMatrix(matrix);
 	
 	return 0;
