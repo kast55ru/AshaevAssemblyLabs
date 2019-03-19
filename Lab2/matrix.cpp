@@ -162,6 +162,8 @@ int* rowPermutations(Matrix* matrix) {
 	
 	return result;
 	*/
+	int* result;
+	bool flag;
 	__asm {
 		mov		esi, matrix
 		mov		edi, [esi]
@@ -169,7 +171,7 @@ int* rowPermutations(Matrix* matrix) {
 		mov		eax, edi
 		mov		ebx, 4
 		imul	ebx
-		
+
 		push	eax
 		call	malloc
 		add		esp, 4
@@ -177,12 +179,12 @@ int* rowPermutations(Matrix* matrix) {
 		mov		ecx, edi
 		dec		ecx
 
-	INIT_RESULT:
-		mov[eax + ecx * 4], 0
-		loop INIT_RESULT
-		mov[eax + ecx * 4], 0
+		INIT_RESULT:
+		mov		dword ptr [eax + ecx * 4], 0
+		loop	INIT_RESULT
+		mov		dword ptr [eax + ecx * 4], 0
 
-		push	eax
+		mov		result, eax
 
 		mov		edx, 0
 	CYCLE_I:
@@ -205,6 +207,7 @@ int* rowPermutations(Matrix* matrix) {
 				jge		END_CYCLE_K
 				
 				; flag = false;
+				mov		byte ptr flag, 0
 
 				mov		eax, 0
 				CYCLE_L:
@@ -212,20 +215,45 @@ int* rowPermutations(Matrix* matrix) {
 					jge		END_CYCLE_L
 
 					; if (get(matrix, i, k) == get(matrix, j, l))
-						; flag = true
-						; break;
+					sub		esp, 4
+					push	eax
+					mov		eax, [esi + 4 + edx * 4]
+					mov		eax, [eax + ebx * 4]
+					mov		[esp + 8], eax
+					pop		eax
+					push	ebx
+					mov		ebx, [esi + 4 + ecx * 4]
+					mov		ebx, [ebx + eax * 4]
+					sub		ebx, [esp + 8]
+					mov		[esp + 8], ebx
+					pop		ebx
+					add		esp, 4
+					cmp		dword ptr [esp], 0
+					jnz		IK_NOT_EQ_JL
+					; flag = true
+					mov		byte ptr flag, 1
+					; break;
+					jmp		END_CYCLE_L
 
+					IK_NOT_EQ_JL:
 					inc		eax
 					jmp		CYCLE_L
 				END_CYCLE_L:
 
 				; if (!flag) { break; }
+				cmp		byte ptr flag, 1
+				jz		END_CYCLE_K
 				
 				inc		ebx
 				jmp		CYCLE_K
 			END_CYCLE_K:
 
 			; if (flag) { result[i] = 1; break; }
+			cmp		byte ptr flag, 0
+			jz		I_EQUALS_J
+			mov		eax, result
+			mov		dword ptr [eax + edx * 4], 1
+			jmp		END_CYCLE_J
 
 			I_EQUALS_J:
 			inc		ecx
@@ -235,6 +263,6 @@ int* rowPermutations(Matrix* matrix) {
 		inc		edx
 		jmp		CYCLE_I
 	END_CYCLE_I:
-		pop		eax
+		mov		eax, result
 	}
 }
